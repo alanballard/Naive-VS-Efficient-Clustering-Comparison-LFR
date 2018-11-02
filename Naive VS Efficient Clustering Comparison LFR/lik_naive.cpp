@@ -729,7 +729,9 @@ cout << temp_POS_BW << endl;*/
 	//remove("solution_lik_naive.txt");
 	bestzsol << "solution_lik_naive" << ".txt";
 	bestzstorage.open("solution_lik_naive.txt", ios::app);
-	for (int i = 0; i < N; i++) { bestzstorage << final_membership[i] << ","; }
+	for (int i = 0; i < N; i++) { bestzstorage << final_membership[i];
+	if (i < N - 1) { bestzstorage << ","; }
+	}
 	bestzstorage << endl;
 	bestzstorage.close();
 

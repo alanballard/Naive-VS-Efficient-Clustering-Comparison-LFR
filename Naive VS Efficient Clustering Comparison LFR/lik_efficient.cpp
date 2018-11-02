@@ -540,10 +540,12 @@ int lik_efficient(
 	ostringstream bestzsol;
 	ofstream bestzstorage;
 	// If old file exists from a previous run, delete it.
-	remove("solution_lik_efficient.txt");
+	//remove("solution_lik_efficient.txt");
 	bestzsol << "solution_lik_efficient" << ".txt";
 	bestzstorage.open("solution_lik_efficient.txt", ios::app);
-	for (int i = 0; i<N; i++){ bestzstorage << final_membership[i] << ","; }
+	for (int i = 0; i<N; i++){ bestzstorage << final_membership[i];
+	if (i < N - 1) { bestzstorage << ","; }
+	}
 	bestzstorage << endl;
 	bestzstorage.close();
 

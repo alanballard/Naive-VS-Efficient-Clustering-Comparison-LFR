@@ -471,7 +471,10 @@ int modularity(
 	 //remove("solution_mod.txt");
 	 bestzsol << "solution_mod" << ".txt";
 	 bestzstorage.open("solution_mod.txt", ios::app);
-	 for (int i = 0; i<N; i++){ bestzstorage << final_membership[i] << ","; }
+	 for (int i = 0; i < N; i++) {
+		 bestzstorage << final_membership[i];
+		 if (i < N - 1) { bestzstorage << ","; }
+	 }
 	 bestzstorage << endl;
 	 bestzstorage.close();
 	 
