@@ -209,6 +209,10 @@ int main()
 	int max_k =22;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
 //4 & 32
+//6 & 29
+//5 & 26
+//5 & 30
+//5 & 24
 			
 	//Simulated Annealing Algorithm Parameters
 	double InitTemp = 1;//.0025;//1
