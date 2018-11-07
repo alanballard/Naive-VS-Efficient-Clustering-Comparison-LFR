@@ -20,7 +20,7 @@ void print_el(vector< vector<pair<int, int>> > links); //Print adjacency and/or 
 //Each method will be fed the same starting network and other paramters
 //Naive likelihood 
 int lik_naive(
-	char *filename,
+	int network_key,
 	vector< vector<pair<int, int>> > links,
 	int nb_links,
 	int N,
@@ -39,7 +39,7 @@ int lik_naive(
 	);
 //Iterative/efficient likelihood
 int lik_efficient(
-	char *filename,
+	int network_key,
 	vector< vector<pair<int, int>> > links,
 	int nb_links,
 	int N,
@@ -58,7 +58,7 @@ int lik_efficient(
 	);
  //Modularity
  int modularity(
-	char *filename,
+	int network_key,
 	vector< vector<pair<int, int>> > links,
 	int nb_links,
 	int N,
@@ -95,29 +95,40 @@ int main()
 	/*LFR Graph Generator Parameters*/
 	bool excess = false;
 	bool defect = false;
-	int nodenum = 100;// 1000;
 
-	double min_avgdeg = 10;// 50;// (double)nodenum / 20;
-	double max_avgdeg = 10;// 100;// (double)nodenum / 10;
-	double step_avgdeg = 1;// 25;//(double)nodenum / 60;
+	//Number of nodes in the network
+	int nodenum = 100;
 
-	int min_maxdeg = 25;// 200;// nodenum / 5;
-	int max_maxdeg = 25;// 00;// nodenum / 5;
+	//average degree
+	double min_avgdeg = 5;
+	double max_avgdeg = 10;
+	double step_avgdeg = 2.5;
+
+	//maximum degree
+	int min_maxdeg = 20;
+	int max_maxdeg = 20;
 	int step_maxdeg = 1;
 
+	//degree distribution power law exponent
 	double min_expdeg = 2;
-	double max_expdeg = 2;
+	double max_expdeg = 3;
 	double step_expdeg = 1;
 
+	//community size distribution power law exponent
 	double min_comsize = 1;
-	double max_comsize = 1;
+	double max_comsize = 2;
 	double step_comsize = 1;
 
+	//mixing parameter
 	double min_mixpar = 0.1;
-	double max_mixpar = 0.1;
-	double step_mixpar = 0.1;
+	double max_mixpar = 0.6;
+	double step_mixpar = 0.05;
 
-	int rep_nbr = 2;
+	int rep_nbr = 100;
+
+//int minnumber = 0;
+//int maxnumber = 0;
+//int numberflag = 1;
 
 	int numberofgroups = 0;		//Used to store the true number of groups as determined by LFR
 
@@ -131,8 +142,14 @@ int main()
 							numberofgroups = benchmark(excess, defect, nodenum, avgdeg, maxdeg, expdeg, comsize, mixpar, rep, network_key);
 							//Just FYI. numberofgroups is the true number of clusters as determined by the LFR network generator
 							//Can be used for testing, if desired.
+//if (numberflag == 1) { minnumber = numberofgroups; maxnumber = numberofgroups; numberflag = 0; }
+//else {
+//		if (numberofgroups < minnumber) { minnumber = numberofgroups; }
+//		if (numberofgroups > maxnumber) { maxnumber = numberofgroups; }
+//}
 //STEP: Write parameters of current LFR network to file
 							cout << "Currently evaluating network " << network_key << " with parameters: " << avgdeg << ", " << maxdeg << ", " << expdeg << ", " << comsize << ", " << mixpar << ", " << rep << endl;
+							
 							ostringstream PARAMETERS_NAME;
 							ofstream NETWORK_PARAMETERS;
 							PARAMETERS_NAME << "LFR_PARAMETERS" << ".dat";
@@ -191,7 +208,7 @@ int main()
 	int min_k =20;	//minimum number of clusters to consider. Must be >=2
 	int max_k =22;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
-
+//4 & 32
 			
 	//Simulated Annealing Algorithm Parameters
 	double InitTemp = 1;//.0025;//1
@@ -213,8 +230,8 @@ int main()
 	//		uniform_real_distribution<double> dist_uni(0.0, 1.0);
 
 	//cout << "#############################################################" << endl;
-	modularity(
-		filename,
+	 modularity(
+		network_key,
 		links,
 		nb_links,
 		N,
@@ -234,7 +251,7 @@ int main()
 
 //cout << "#############################################################" << endl;
 	lik_naive(
-		filename,
+		network_key,
 		links,
 		nb_links,
 		N,
@@ -254,7 +271,7 @@ int main()
 	
 //cout << "#############################################################" << endl;
 	lik_efficient(
-		filename,
+		network_key,
 		links,
 		nb_links,
 		N,
@@ -271,7 +288,11 @@ int main()
 		Success_counter,
 		IT
 		);
-	
+
+
+
+
+	network_key++;
 	//cout << "#############################################################" << endl;
 
 
@@ -281,6 +302,7 @@ int main()
 			}
 		}
 	}//End LFR parameter for loops
+//	cout << minnumber << "***" << maxnumber << endl; 
 
 	cout << "Program ended. Hit enter to exit.";
 	cin.get(); cin.get();

@@ -22,7 +22,7 @@ vector<int> mutate_membership(vector<int> current_membership, vector<int> group_
 
 int modularity(
 	//int seed,
-	char *filename,
+	int network_key,
 	vector< vector<pair<int, int>> > links,
 	int nb_links,
 	int N,
@@ -447,7 +447,7 @@ int modularity(
 		//remove("completion_mod_all_sols.txt");
 		atkstring << "completion_mod_all_sols" << ".txt";
 		atkinfo.open("completion_mod_all_sols.txt", ios::app);
-		atkinfo << filename << "," << N << "," << nb_links << "," << k << "," << mod_0 << "," << full_loglik_curr <<","<< BIC << "," << TESTSTAT << "," << time << endl;
+		atkinfo << network_key << "," << N << "," << nb_links << "," << k << "," << mod_0 << "," << full_loglik_curr <<","<< BIC << "," << TESTSTAT << "," << time << endl;
 		atkinfo.close();
 
 
@@ -460,7 +460,7 @@ int modularity(
 	//remove("completion_mod_final_sol.txt");
 	atkstring2 << "completion_mod_final_sol" << ".txt";
 	atkinfo2.open("completion_mod_final_sol.txt", ios::app);
-	atkinfo2 << filename << "," << N << "," << nb_links << "," << final_k << "," << final_MODULARITY << "," << final_LOGLIK << "," << final_BIC << "," << final_TESTSTAT << "," << final_TIME << endl;
+	atkinfo2 << network_key << "," << N << "," << nb_links << "," << final_k << "," << final_MODULARITY << "," << final_LOGLIK << "," << final_BIC << "," << final_TESTSTAT << "," << final_TIME << endl;
 	atkinfo2.close();
 
 
