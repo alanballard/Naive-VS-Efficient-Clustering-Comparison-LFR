@@ -7,7 +7,6 @@
 #include <cctype>		//for yes/no question
 
 void srand_file(void);
-//int benchmark(int **arr, int *comm, bool excess, bool defect, int nodenum, double avgdeg, int maxdeg, double expdeg, double comsiz, double mixpar, int rep);
 int benchmark(bool excess, bool defect, int nodenum, double avgdeg, int maxdeg, double expdeg, double comsiz, double mixpar, int rep, int network_key);
 
 
@@ -92,9 +91,11 @@ int main()
 	BETA comsize=1
 	MYU mixpar=0.1
 	*/
-	/*LFR Graph Generator Parameters*/
-	bool excess = false;
-	bool defect = false;
+
+/*LFR Graph Generator Parameters. */
+
+	bool excess = false; //These parameters should not be changed.
+	bool defect = false; //These parameters should not be changed.
 
 	//Number of nodes in the network
 	int nodenum = 100;
