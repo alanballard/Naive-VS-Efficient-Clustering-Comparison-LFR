@@ -105,7 +105,7 @@ int main()
 	//average degree
 	double min_avgdeg = 5;
 	double max_avgdeg = 10;
-	double step_avgdeg = 2.5;
+	double step_avgdeg = 5;
 
 	//maximum degree
 	int min_maxdeg = 20;
@@ -125,9 +125,9 @@ int main()
 	//mixing parameter
 	double min_mixpar = 0.1;
 	double max_mixpar = 0.6;
-	double step_mixpar = 0.05;
+	double step_mixpar = 0.1;
 
-	int rep_nbr = 100;
+	int rep_nbr = 10;
 
 //int minnumber = 0;
 //int maxnumber = 0;
@@ -142,6 +142,7 @@ int main()
 				for (double expdeg = min_expdeg; expdeg <= max_expdeg; expdeg = expdeg + step_expdeg) {
 					for (double comsize = min_comsize; comsize <= max_comsize; comsize = comsize + step_comsize) {
 						for (double mixpar = min_mixpar; mixpar <= max_mixpar; mixpar = mixpar + step_mixpar) {
+							numberofgroups = 0;
 							numberofgroups = benchmark(excess, defect, nodenum, avgdeg, maxdeg, expdeg, comsize, mixpar, rep, network_key);
 							//Just FYI. numberofgroups is the true number of clusters as determined by the LFR network generator
 							//Can be used for testing, if desired.
@@ -208,20 +209,17 @@ int main()
 	//print_el(links); //print network as adjacency list, including weights. Can also print out as edge list, but currently commented out
 
 	//Specify the number of clusters in which to cluster the network
-	int min_k =2;	//minimum number of clusters to consider. Must be >=2
-	int max_k =35;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
+	int min_k = numberofgroups;	//minimum number of clusters to consider. Must be >=2
+	int max_k = numberofgroups;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
-//4 & 32
-//6 & 29
-//5 & 26
-//5 & 30
-//5 & 24
-			
+	//4-32
+	//1-15
+
 	//Simulated Annealing Algorithm Parameters
-	double InitTemp = 2.5;//.0025;//1
-	double CR = .9925;// 0.9925;//.99
-	int TL = 13750;// 15000;	//300		//Maximum number of reclustering attempts at a given temperature
-	int Max_Success = TL;//100	//Maximum number of successes allowed at a given temperature
+	double InitTemp = 2.5;
+	double CR = .9925;
+	int TL = 1000;			//Maximum number of reclustering attempts at a given temperature
+	int Max_Success = TL;	//Maximum number of successes allowed at a given temperature
 							//Note: Setting both these values=1 is the equivalent of not using them at all in the SA algorithm.
 	double LimitIT = 1.0e-8;
 	double epsilon = 1.0e-6;
@@ -229,7 +227,7 @@ int main()
 	int Success_counter = 0;
 
 	double IT = InitTemp; //IT changes during Simulated Annealing process. InitTemp is used to initialize (or re-initialize) IT at the start of the process when multiple k values are analyzed
-	
+
 //	int seed = 0;	
 	srand(time(0));
 	//		random_device rd;
