@@ -74,6 +74,8 @@ int lik_efficient(
 	int Success_counter,
 	double IT
 );
+ int louvain_convert_2b(vector<vector<pair<int, int/*long double*/> > > source_links, int nb_links, char *filename);
+ vector<int> louvain_clustering(char *filename, int network_key, vector< vector<pair<int, int>> > links, int nb_links);
 
 int main()
 {
@@ -206,8 +208,8 @@ int main()
 	//print_el(links); //print network as adjacency list, including weights. Can also print out as edge list, but currently commented out
 
 	//Specify the number of clusters in which to cluster the network
-	int min_k =20;	//minimum number of clusters to consider. Must be >=2
-	int max_k =22;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
+	int min_k =2;	//minimum number of clusters to consider. Must be >=2
+	int max_k =35;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
 //4 & 32
 //6 & 29
@@ -216,9 +218,9 @@ int main()
 //5 & 24
 			
 	//Simulated Annealing Algorithm Parameters
-	double InitTemp = 1;//.0025;//1
+	double InitTemp = 2.5;//.0025;//1
 	double CR = .9925;// 0.9925;//.99
-	int TL = 150;// 15000;	//300		//Maximum number of reclustering attempts at a given temperature
+	int TL = 13750;// 15000;	//300		//Maximum number of reclustering attempts at a given temperature
 	int Max_Success = TL;//100	//Maximum number of successes allowed at a given temperature
 							//Note: Setting both these values=1 is the equivalent of not using them at all in the SA algorithm.
 	double LimitIT = 1.0e-8;
@@ -294,7 +296,11 @@ int main()
 		IT
 		);
 
-
+//	cout << "LOUVAIN METHOD" << endl;
+	louvain_convert_2b(links, nb_links, filename);
+	char binary_file[256] = "louvain_binary.txt";
+	vector<int> louvain_solution = louvain_clustering(binary_file, network_key, links, nb_links);
+//	cout << "#############################################################" << endl;
 
 
 	network_key++;

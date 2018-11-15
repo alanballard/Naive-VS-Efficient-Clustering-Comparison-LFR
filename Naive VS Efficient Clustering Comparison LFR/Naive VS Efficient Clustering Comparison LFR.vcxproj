@@ -154,18 +154,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="initial_pop.cpp" />
     <ClCompile Include="lik_efficient.cpp" />
     <ClCompile Include="lik_naive.cpp" />
+    <ClCompile Include="Louvain Convert to Binary\graph_2b.cpp" />
+    <ClCompile Include="Louvain Convert to Binary\louvain_convert_2b.cpp" />
+    <ClCompile Include="Louvain Undirected Clustering\graph_binary.cpp" />
+    <ClCompile Include="Louvain Undirected Clustering\louvain.cpp" />
+    <ClCompile Include="Louvain Undirected Clustering\louvain_modularity.cpp" />
+    <ClCompile Include="Louvain Undirected Clustering\main_louvain.cpp" />
+    <ClCompile Include="Louvain Undirected Clustering\quality.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="modularity.cpp" />
     <ClCompile Include="mutate_membership.cpp" />
     <ClCompile Include="print_el.cpp" />
     <ClCompile Include="read_el.cpp" />
     <ClCompile Include="undirected_LFR.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Louvain Convert to Binary\graph_2b.h" />
+    <ClInclude Include="Louvain Undirected Clustering\graph_binary.h" />
+    <ClInclude Include="Louvain Undirected Clustering\louvain.h" />
+    <ClInclude Include="Louvain Undirected Clustering\louvain_modularity.h" />
+    <ClInclude Include="Louvain Undirected Clustering\quality.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
