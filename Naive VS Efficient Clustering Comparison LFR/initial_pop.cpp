@@ -42,7 +42,8 @@ int initial_pop(vector<int>& group_size, vector<int>& cluster_membership, int k,
 			failure_count++;
 		}
 		//cout << failure_count << endl;
-		if (failure_count == 10000){
+		if (failure_count == 10000)//10000
+		{
 			cout << "CANNOT MEET INTITIAL CLUSTERING REQUIREMENTS" << endl;
 			cout << "SEE INITIAL_POP.cpp"; cin.get(); cin.get();
 		}

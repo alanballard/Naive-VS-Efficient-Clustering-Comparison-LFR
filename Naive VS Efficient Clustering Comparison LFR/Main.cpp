@@ -5,6 +5,7 @@
 #include <time.h>		//for calculating run-time
 #include <vector>
 #include <cctype>		//for yes/no question
+#include <iomanip>
 
 void srand_file(void);
 int benchmark(bool excess, bool defect, int nodenum, double avgdeg, int maxdeg, double expdeg, double comsiz, double mixpar, int rep, int network_key);
@@ -79,6 +80,7 @@ int lik_efficient(
 
 int main()
 {
+	clock_t start_new = clock();
 
 //STEP: Create LFR graph(s)
 	bool NEW = true;
@@ -104,7 +106,7 @@ int main()
 
 	//average degree
 	double min_avgdeg = 5;
-	double max_avgdeg = 10;
+	double max_avgdeg = 5;//10
 	double step_avgdeg = 5;
 
 	//maximum degree
@@ -114,20 +116,20 @@ int main()
 
 	//degree distribution power law exponent
 	double min_expdeg = 2;
-	double max_expdeg = 3;
+	double max_expdeg = 2;//3
 	double step_expdeg = 1;
 
 	//community size distribution power law exponent
 	double min_comsize = 1;
-	double max_comsize = 2;
+	double max_comsize = 1;//2
 	double step_comsize = 1;
 
 	//mixing parameter
 	double min_mixpar = 0.1;
-	double max_mixpar = 0.6;
+	double max_mixpar = 0.6;//.6
 	double step_mixpar = 0.1;
 
-	int rep_nbr = 10;
+	int rep_nbr = 1;//10
 
 //int minnumber = 0;
 //int maxnumber = 0;
@@ -144,6 +146,7 @@ int main()
 						for (double mixpar = min_mixpar; mixpar <= max_mixpar; mixpar = mixpar + step_mixpar) {
 							numberofgroups = 0;
 							numberofgroups = benchmark(excess, defect, nodenum, avgdeg, maxdeg, expdeg, comsize, mixpar, rep, network_key);
+//cout<<"numberofgroups is "<<numberofgroups<<endl;
 							//Just FYI. numberofgroups is the true number of clusters as determined by the LFR network generator
 							//Can be used for testing, if desired.
 //if (numberflag == 1) { minnumber = numberofgroups; maxnumber = numberofgroups; numberflag = 0; }
@@ -151,6 +154,7 @@ int main()
 //		if (numberofgroups < minnumber) { minnumber = numberofgroups; }
 //		if (numberofgroups > maxnumber) { maxnumber = numberofgroups; }
 //}
+
 //STEP: Write parameters of current LFR network to file
 							cout << "Currently evaluating network " << network_key << " with parameters: " << avgdeg << ", " << maxdeg << ", " << expdeg << ", " << comsize << ", " << mixpar << ", " << rep << endl;
 							
@@ -212,8 +216,10 @@ int main()
 	int min_k = numberofgroups;	//minimum number of clusters to consider. Must be >=2
 	int max_k = numberofgroups;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
-	//4-32
-	//1-15
+	//100
+		//4-32, 6-22, 5-27, 6-28, 6-24, 6-26, 6-22, 6-25
+	//1000
+		//75-257, 77-254, 76-252
 
 	//Simulated Annealing Algorithm Parameters
 	double InitTemp = 2.5;
@@ -273,7 +279,7 @@ int main()
 		Success_counter,
 		IT
 	);
-	
+
 //cout << "#############################################################" << endl;
 	lik_efficient(
 		network_key,
@@ -311,9 +317,15 @@ int main()
 			}
 		}
 	}//End LFR parameter for loops
-//	cout << minnumber << "***" << maxnumber << endl; 
+//cout << minnumber << "***" << maxnumber << endl; 
+//CALCULATE TIME REQUIRED TO RUN ENTIRE PROGRAM
+		//cout << fixed;
 
-	cout << "Program ended. Hit enter to exit.";
+	cout << setprecision(10);
+	clock_t end_new = clock();
+	double time = (double)(end_new - start_new) / CLOCKS_PER_SEC;/*(double)(end_new - start_new) * 1000.0 / CLOCKS_PER_SEC  for milliseconds*/
+
+	cout << "Program ended in "<< time <<" seconds. Hit enter to exit.";
 	cin.get(); cin.get();
 
 }//END main()
