@@ -2,13 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>	
-#include <time.h>		//for calculating run-time
-#include <string>		//for outputting file name
+#include <time.h>		
+#include <string>		
 #include <iomanip>
-#include <math.h>       //need for exponent fct.
-#include <algorithm>    //need for mininimum fct.
+#include <math.h>       
+#include <algorithm>    
 #include <vector>
-#include <cctype>		//for yes/no question
+#include <cctype>		
 #include <random>
 
 using namespace std;
@@ -46,10 +46,9 @@ int lik_naive(
 	//Repeat Simulated Annealing process for each k in the range of specified cluster numbers
 	for (int k = min_k; k <= max_k; k = k + k_int)
 	{
-		//long double diff = 1.0e-10; //Used to check for absolute differences between 2 numbers
 
 		int STG1 = 0; int STG2 = 0; int STG3 = 0;
-		//cout << "NAIVE LIKELIHOOD METHOD, k=" << k << endl;
+//cout << "NAIVE LIKELIHOOD METHOD, k=" << k << endl;
 
 		clock_t start_new = clock(); //Time until solution
 
@@ -177,39 +176,6 @@ int lik_naive(
 					}
 				}
 
-/*cout << "OBS matrix" << endl;
-				for (int i = 0; i < k; i++)
-				{
-					for (int j = 0; j < k; j++)
-					{
-						cout << OBS[i][j] << "...";
-					} cout << endl;
-				} cout << endl;
-				cout << "*******************" << endl;
-				cout << "*******************" << endl;
-cout << "POS matrix" << endl;
-				for (int i = 0; i < k; i++)
-				{
-					for (int j = 0; j < k; j++)
-					{
-						cout << POS[i][j] << "...";
-					} cout << endl;
-				} cout << endl;
-				cout << "*******************" << endl;
-/*int OBS_CHECK=0;
-for (int i = 0; i < k; i++) {
-	for (int j = i; j < k; j++) { 
-		OBS_CHECK = OBS_CHECK + OBS[i][j]; 
-		cout << OBS_CHECK << endl;
-	}	
-}
-if (OBS_CHECK != nb_links) { cout << "OBS1=" << OBS_CHECK << endl; cin.get(); } //Should be 78
-int POS_CHECK = 0;
-for (int i = 0; i < k; i++) { for (int j = i; j < k; j++) { POS_CHECK = POS_CHECK + POS[i][j];cout << POS_CHECK << endl;
-} }
-if (POS_CHECK != N * (N - 1) / 2) { cout << "POS1=" << POS_CHECK << endl; cin.get(); } //Should be 34 choose 2 = 561
-*/
-
 //Step: Calculate full loglikelihood of this membership (Binomial)
 				l_0_w = 0; //loglikelihood of within-clusters
 				l_0_b = 0; //loglikelihood of between-clusters
@@ -217,16 +183,13 @@ if (POS_CHECK != N * (N - 1) / 2) { cout << "POS1=" << POS_CHECK << endl; cin.ge
 				for (int i = 0; i < k; i++)
 				{
 					param_i_0 = 0;
-					param_i_0 = OBS[i][i] / (long double)POS[i][i];// parameter for within-cluster i density
-					//if (fabs(param_i_0 - 0) < diff || fabs(param_i_0 - 1) < diff) { l_0_w = l_0_w; }
+					param_i_0 = OBS[i][i] / (long double)POS[i][i];// parameter for within-cluster i density					
 					if (param_i_0 == 0 || param_i_0 == 1) { l_0_w = l_0_w; }
 					else 
 					{
 						l_0_w = l_0_w + (OBS[i][i])*log(param_i_0) + (POS[i][i] - OBS[i][i])*log(1 - param_i_0);
 					}
-//cout<<"P["<<i<<"]="<< param_i_0 <<", ";
 				}
-//cin.get();
 
 
 				//Get loglikelihood of between-cluster edges
@@ -236,15 +199,6 @@ if (POS_CHECK != N * (N - 1) / 2) { cout << "POS1=" << POS_CHECK << endl; cin.ge
 				{
 					for (int j = i + 1; j < k; j++)
 					{
-/*						check_param = 0;
-						check_param = OBS[i][j] / (long double)POS[i][j];
-							//if (fabs(check_param - 0) < diff || fabs(check_param - 1) < diff)
-							if (check_param == 0 || check_param == 1)
-							{ 
-								TOT_OBS = TOT_OBS; 
-								TOT_POS = TOT_POS;
-							}
-							else*/
 							{//Modeling between-cluster vertices with a single parameter. Loglikelihood calculate below, outside of i/j loop
 								TOT_OBS = TOT_OBS + OBS[i][j];
 								TOT_POS = TOT_POS + POS[i][j];
@@ -253,13 +207,11 @@ if (POS_CHECK != N * (N - 1) / 2) { cout << "POS1=" << POS_CHECK << endl; cin.ge
 				}
 				param_bw_0 = 0;
 				param_bw_0 = TOT_OBS / (long double)TOT_POS;
-				//if (fabs(param_bw_0 - 0) < diff || fabs(param_bw_0 - 1) < diff) { l_0_b = 0; }
 				if (param_bw_0 == 0 || param_bw_0 == 1) { l_0_b = 0; }
 				else {
 					//Loglikelihood of between cluster edges when modeled with a single parameter
 					l_0_b = (TOT_OBS)*log(param_bw_0) + ((long double)TOT_POS - TOT_OBS)*log(1 - param_bw_0);
 				}
-//cout<<"P[bw]="<< param_bw_0 <<", "<<endl;
 
 				l_0 = l_0_w + l_0_b;
 			}//end while 1st run loop
@@ -322,39 +274,6 @@ if (POS_CHECK != N * (N - 1) / 2) { cout << "POS1=" << POS_CHECK << endl; cin.ge
 					PROP_POS[j][i] = PROP_POS[j][i] + (unsigned long long int) (prop_group_size[j] * prop_group_size[i]);
 				}
 			}
-/*cout << "OBS matrix" << endl;
-				for (int i = 0; i < k; i++)
-				{
-					for (int j = 0; j < k; j++)
-					{
-						cout << PROP_OBS[i][j] << "...";
-					} cout << endl;
-				} cout << endl;
-				cout << "*******************" << endl;
-				cout << "*******************" << endl;
-cout << "POS matrix" << endl;
-				for (int i = 0; i < k; i++)
-				{
-					for (int j = 0; j < k; j++)
-					{
-						cout << PROP_POS[i][j] << "...";
-					} cout << endl;
-				} cout << endl;
-				cout << "*******************" << endl;
-int OBS_CHECK=0;
-for (int i = 0; i < k; i++) {
-	for (int j = i; j < k; j++) { 
-		OBS_CHECK = OBS_CHECK + PROP_OBS[i][j];
-		cout << OBS_CHECK << endl;
-	}	
-}
-if (OBS_CHECK != nb_links) { cout << "OBS2=" << OBS_CHECK << endl; cin.get(); } //Should be 78
-int POS_CHECK = 0;
-for (int i = 0; i < k; i++) { for (int j = i; j < k; j++) { POS_CHECK = POS_CHECK + PROP_POS[i][j];cout << POS_CHECK << endl;
-} }
-if (POS_CHECK != N * (N - 1) / 2) { cout << "POS2=" << POS_CHECK << endl; cin.get(); } //Should be 34 choose 2 = 561
-cin.get();
-*/
 
 //Step: Calculate full loglikelihood of proposed membership (Binomial)
 				l_1_w = 0; //loglikelihood of within-clusters
@@ -366,13 +285,11 @@ cin.get();
 					param_i_1 = 0;
 					param_i_1 = PROP_OBS[i][i] / (long double)PROP_POS[i][i];// parameter for within-cluster i density
 					
-					//if (fabs(param_i_1 - 0) < diff || fabs(param_i_1 - 1) < diff) { l_1_w = l_1_w; }
 					if (param_i_1 == 0 || param_i_1 == 1) { l_1_w = l_1_w; }
 					else 
 					{
 						l_1_w = l_1_w + (PROP_OBS[i][i])*log(param_i_1) + (PROP_POS[i][i] - PROP_OBS[i][i])*log(1 - param_i_1);
 					}
-//cout<<"P["<<i<<"]="<< param_i_1 <<", ";
 
 				}
 
@@ -384,15 +301,7 @@ cin.get();
 				{
 					for (int j = i + 1; j < k; j++)
 					{
-/*						check_param = 0;
-						check_param = PROP_OBS[i][j] / (long double)PROP_POS[i][j];
-							//if(fabs(check_param-0)<diff|| fabs(check_param - 1) < diff)
-							if (check_param == 0 || check_param == 1)
-							{ 
-								TOT_OBS_PROP = TOT_OBS_PROP;
-								TOT_POS_PROP = TOT_POS_PROP;
-							}
-							else*/
+
 							{//Modeling between-cluster vertices with a single parameter. Loglikelihood calculate below, outside of i/j loop
 								TOT_OBS_PROP = TOT_OBS_PROP + PROP_OBS[i][j];
 								TOT_POS_PROP = TOT_POS_PROP + PROP_POS[i][j];
@@ -401,17 +310,13 @@ cin.get();
 				}
 				param_bw_1 = 0;
 				param_bw_1 = TOT_OBS_PROP / (long double)TOT_POS_PROP;
-
 				
-				//if (fabs(param_bw_1 - 0) <diff || fabs(param_bw_1 - 1) < diff) { l_1_b = 0; }
 				if (param_bw_1 == 0 || param_bw_1 == 1) { l_1_b = 0; }
 				else {
 					//Loglikelihood of between cluster edges when modeled with a single parameter
 					l_1_b = (TOT_OBS_PROP)*log(param_bw_1) + ((long double)TOT_POS_PROP - TOT_OBS_PROP)*log(1 - param_bw_1);
 				}
 
-//cout<<"P[bw]="<< param_bw_1 <<", "<<endl;
-//cin.get();
 				l_1 = l_1_b + l_1_w;
 
 //Step: Calculate change in log-likelihood (Binomial) due to reclustering
@@ -457,14 +362,13 @@ delta_l = 0;
 					}
 				}
 				l_1 = 0;
-				//delta_l = 0;
 STG1++;
 			}
 			else
 			{
 				long double one = 1;      //used in MIN call to match data types.
 
-				double uni_draw = rand() / double(RAND_MAX);// dist_uni(e3);// dist_uni(engine)/*uniform_rand(rand())*/;
+				double uni_draw = rand() / double(RAND_MAX);
 				double min_val = min(one, exp(delta_l / IT));
 
 				if (uni_draw < min_val) //Accept proposed clustering
@@ -497,7 +401,6 @@ STG1++;
 						}
 					}
 					l_1 = 0;
-					//delta_l = 0;
 STG2++;
 
 				}
@@ -514,7 +417,6 @@ STG2++;
 						}
 					}
 					l_1 = 0;
-					//delta_l = 0;
 STG3++;
 
 				}
@@ -528,42 +430,12 @@ STG3++;
 			//1. Been Accepted. membership vector/OBS/POS/cluster counts have beeen updated to reflect new clustering
 			//2. Rejected. memberhsip vector/OBS/POS/cluster counts still correspond to the current clustering.	
 
-/*		cout << "Number of success at each stage" << endl;
-		cout << "<" << STG1 << ", " << STG2 << ", " << STG3 << ">" << endl;
-		cout << "*******************" << endl;
-		cout << "Solution cluster sizes" << endl;
-		for (int i = 0; i < group_size.size(); i++) { cout << group_size[i] << "..."; }cout << endl;
-		cout << "*******************" << endl;
-		cout << "Solution OBS matrix" << endl;
-		for (int i = 0; i < k; i++)
-		{
-			for (int j = 0; j < k; j++)
-			{
-				cout << OBS[i][j] << "...";
-			} cout << endl;
-		} cout << endl;
-		cout << "*******************" << endl;
-		cout << "*******************" << endl;
-		cout << "Solution POS matrix" << endl;
-		for (int i = 0; i < k; i++)
-		{
-			for (int j = 0; j < k; j++)
-			{
-				cout << POS[i][j] << "...";
-			} cout << endl;
-		} cout << endl;
-		cout << "*******************" << endl;
-		cout << "Solution cluster membership vector" << endl;
-		for (int i = 0; i < cluster_membership.size(); i++) { cout << cluster_membership[i] << ", "; }cout << endl;
-		cout << "Solution likelihood" << endl;
-		cout << l_0 << endl;*/
-
 
 		//CALCULATE TIME REQUIRED TO REACH SOLUTION
-				//cout << fixed;
+		//cout << fixed;
 		cout << setprecision(10);
 		clock_t end_new = clock();
-		double time = (double)(end_new - start_new) / CLOCKS_PER_SEC; /*(double)(end_new - start_new) * 1000.0 / CLOCKS_PER_SEC  for milliseconds*/
+		double time = (double)(end_new - start_new) / CLOCKS_PER_SEC; 
 
 		//At this point, a solution clustering has been identified.
 		long double full_loglik_curr = 0;	//loglikelihood for the full clustering
@@ -584,7 +456,6 @@ STG3++;
 			for (int j = i; j < k; j++)
 			{
 				LO_OBS = LO_OBS + OBS[i][j];
-				//cout << "OBS[i][j]="<<OBS[i][j] <<", LO_OBS="<< LO_OBS << endl;
 			}
 		}
 		LO_POS = N * (N - 1) / 2; //N choose 2
@@ -644,32 +515,6 @@ STG3++;
 		mod_0 = e_mm - a_mm; //modularity of solution membership assignment
 
 
-//Checking the observed and possible edge counts in the final solution
-/*for(int i=0; i<k; i++){cout<<OBS[i][i]<<",,,"; }
-long long int temp_OBS_BW = 0;
-for (int i = 0; i < k; i++)
-{
-	for (int j = i+1; j < k; j++)
-	{
-		temp_OBS_BW = temp_OBS_BW + OBS[i][j];
-	}
-}
-cout<< temp_OBS_BW <<endl;
-for (int i = 0; i < k; i++) { cout << POS[i][i] << ",,,"; }
-long long int temp_POS_BW = 0;
-for (int i = 0; i < k; i++)
-{
-	for (int j = i + 1; j < k; j++)
-	{
-		temp_POS_BW = temp_POS_BW + POS[i][j];
-	}
-}
-cout << temp_POS_BW << endl;*/
-
-//Checking the null hypothesis stats
-//cout << "LO=" << LO << ", LO_OBS=" << LO_OBS << ", LO_POS=" << LO_POS << endl;
-
-
 //STEP: Calculate Bayesian Information Criterion for solution clustering
 		//In old code, BIC = -2 * (LO + 0.5*(-bestfit)) + (k + 1)*log(N*(N - 1) / 2);
 		//but bestfit = -(-2 * (LO - full_loglik_curr)), so this can be simplified:		
@@ -677,7 +522,6 @@ cout << temp_POS_BW << endl;*/
 		BIC = -2 * (full_loglik_curr)+(k + 1)*log(N*(N - 1) / (long double)2);
 		TESTSTAT = -2 * (LO - full_loglik_curr);
 
-//cout << "at k=" << k << ", modularity= " << mod_0 << ", loglik=" << full_loglik_curr << ", BIC=" << BIC << ", TESTSTAT=" << TESTSTAT<< ", time=" << time << " sec.s"<< endl;
 		//Identify the optimal number of clusters, based on minimum Bayesian Information Criterion
 		if (k == min_k) {
 			final_k = k;

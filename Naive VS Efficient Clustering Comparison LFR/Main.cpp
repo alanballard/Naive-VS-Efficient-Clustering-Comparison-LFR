@@ -2,14 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>	
-#include <time.h>		//for calculating run-time
+#include <time.h>		
 #include <vector>
-#include <cctype>		//for yes/no question
+#include <cctype>		
 #include <iomanip>
 
 void srand_file(void);
 int benchmark(bool excess, bool defect, int nodenum, double avgdeg, int maxdeg, double expdeg, double comsiz, double mixpar, int rep, int network_key);
-
 
 using namespace std;
 
@@ -85,19 +84,8 @@ int main()
 //STEP: Create LFR graph(s)
 	bool NEW = true;
 	srand_file();
-	/*
-	To create:
-	N=250, 500, 750, 1000, 1250, 1500, 1750, 2000
-	Values from Fig. 9...
-	avgdeg=10
-	maxdeg=25
-	GAMMA expdeg=2
-	BETA comsize=1
-	MYU mixpar=0.1
-	*/
 
 /*LFR Graph Generator Parameters. */
-
 	bool excess = false; //These parameters should not be changed.
 	bool defect = false; //These parameters should not be changed.
 
@@ -106,7 +94,7 @@ int main()
 
 	//average degree
 	double min_avgdeg = 5;
-	double max_avgdeg = 5;//10
+	double max_avgdeg = 10;
 	double step_avgdeg = 5;
 
 	//maximum degree
@@ -116,20 +104,20 @@ int main()
 
 	//degree distribution power law exponent
 	double min_expdeg = 2;
-	double max_expdeg = 2;//3
+	double max_expdeg = 3;
 	double step_expdeg = 1;
 
 	//community size distribution power law exponent
 	double min_comsize = 1;
-	double max_comsize = 1;//2
+	double max_comsize = 2;
 	double step_comsize = 1;
 
 	//mixing parameter
 	double min_mixpar = 0.1;
-	double max_mixpar = 0.6;//.6
+	double max_mixpar = 0.6;
 	double step_mixpar = 0.1;
 
-	int rep_nbr = 1;//10
+	int rep_nbr = 10;
 
 //int minnumber = 0;
 //int maxnumber = 0;
@@ -144,11 +132,9 @@ int main()
 				for (double expdeg = min_expdeg; expdeg <= max_expdeg; expdeg = expdeg + step_expdeg) {
 					for (double comsize = min_comsize; comsize <= max_comsize; comsize = comsize + step_comsize) {
 						for (double mixpar = min_mixpar; mixpar <= max_mixpar; mixpar = mixpar + step_mixpar) {
-							numberofgroups = 0;
+							numberofgroups = 0; //numberofgroups is the true number of clusters as determined by the LFR network generator
 							numberofgroups = benchmark(excess, defect, nodenum, avgdeg, maxdeg, expdeg, comsize, mixpar, rep, network_key);
 //cout<<"numberofgroups is "<<numberofgroups<<endl;
-							//Just FYI. numberofgroups is the true number of clusters as determined by the LFR network generator
-							//Can be used for testing, if desired.
 //if (numberflag == 1) { minnumber = numberofgroups; maxnumber = numberofgroups; numberflag = 0; }
 //else {
 //		if (numberofgroups < minnumber) { minnumber = numberofgroups; }
@@ -210,16 +196,12 @@ int main()
 	nb_links = nb_links / 2;
 
 	//Print network as edge list and adjacency list. Can be commented out when running the real program.
-	//print_el(links); //print network as adjacency list, including weights. Can also print out as edge list, but currently commented out
+	//print_el(links); //print network as adjacency list, including weights. 
 
 	//Specify the number of clusters in which to cluster the network
 	int min_k = numberofgroups;	//minimum number of clusters to consider. Must be >=2
-	int max_k = numberofgroups;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices
+	int max_k = numberofgroups;	//maximum number of clusters to consider. Must be small enough that each cluster can contain atlest 2 vertices. The maximum number of initial clustering attempts is specfied in initial_pop.cpp.
 	int k_int =1;   //step size from min_k to max_k. 1=evaluate every cluster size from min_k to max_k. 2=evaluate every other cluster size, and so on.
-	//100
-		//4-32, 6-22, 5-27, 6-28, 6-24, 6-26, 6-22, 6-25
-	//1000
-		//75-257, 77-254, 76-252
 
 	//Simulated Annealing Algorithm Parameters
 	double InitTemp = 2.5;
@@ -234,11 +216,7 @@ int main()
 
 	double IT = InitTemp; //IT changes during Simulated Annealing process. InitTemp is used to initialize (or re-initialize) IT at the start of the process when multiple k values are analyzed
 
-//	int seed = 0;	
 	srand(time(0));
-	//		random_device rd;
-	//		mt19937 e2(rd());
-	//		uniform_real_distribution<double> dist_uni(0.0, 1.0);
 
 	//cout << "#############################################################" << endl;
 	 modularity(
@@ -301,6 +279,10 @@ int main()
 		);
 
 //	cout << "LOUVAIN METHOD" << endl;
+	//LFR network is converted to, and read into Louvain Method clustering code as, binary format
+	//When calculating time-to-solution for the Louvain Method, however, the clock only starts after
+	//the network has been read in and clustering started. It doesn't include the binary converstion/reading process time.
+	//The clock stops once the final solution has been reached.
 	louvain_convert_2b(links, nb_links, filename);
 	char binary_file[256] = "louvain_binary.txt";
 	vector<int> louvain_solution = louvain_clustering(binary_file, network_key, links, nb_links);
@@ -308,7 +290,7 @@ int main()
 
 
 	network_key++;
-	//cout << "#############################################################" << endl;
+//cout << "#############################################################" << endl;
 
 
 						}
@@ -318,9 +300,9 @@ int main()
 		}
 	}//End LFR parameter for loops
 //cout << minnumber << "***" << maxnumber << endl; 
-//CALCULATE TIME REQUIRED TO RUN ENTIRE PROGRAM
-		//cout << fixed;
 
+//CALCULATE TIME REQUIRED TO RUN ENTIRE PROGRAM
+	//cout << fixed;
 	cout << setprecision(10);
 	clock_t end_new = clock();
 	double time = (double)(end_new - start_new) / CLOCKS_PER_SEC;/*(double)(end_new - start_new) * 1000.0 / CLOCKS_PER_SEC  for milliseconds*/

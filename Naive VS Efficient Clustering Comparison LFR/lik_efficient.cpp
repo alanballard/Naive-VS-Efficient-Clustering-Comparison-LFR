@@ -2,13 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>	
-#include <time.h>		//for calculating run-time
-#include <string>		//for outputting file name
+#include <time.h>		
+#include <string>		
 #include <iomanip>
-#include <math.h>       //need for exponent fct.
-#include <algorithm>    //need for mininimum fct.
+#include <math.h>       
+#include <algorithm>    
 #include <vector>
-#include <cctype>		//for yes/no question
+#include <cctype>		
 #include <random>
 
 using namespace std;
@@ -46,11 +46,7 @@ int lik_efficient(
 	//Repeat Simulated Annealing process for each k in the range of specified cluster numbers
 	for (int k = min_k; k <= max_k; k=k + k_int)
 	{
-		//cout << "EFFICIENT LIKELIHOOD METHOD, k=" << k << endl;
-	
-		//random_device rd;
-		//mt19937 e3(rd());
-		//uniform_real_distribution<double> dist_uni(0.0, 1.0);
+//cout << "EFFICIENT LIKELIHOOD METHOD, k=" << k << endl;
 		
 		clock_t start_new = clock(); //Time until solution
 		
@@ -334,7 +330,7 @@ int lik_efficient(
 			{
 				long double one = 1;      //used in MIN call to match data types.
 
-				double uni_draw = rand() / double(RAND_MAX);// dist_uni(e3);// dist_uni(engine)/*uniform_rand(rand())*/;
+				double uni_draw = rand() / double(RAND_MAX);
 				double min_val = min(one, exp(delta_l / IT));
 				
 				if (uni_draw < min_val) //Accept proposed clustering
@@ -382,7 +378,7 @@ int lik_efficient(
 		//cout << fixed;
 		cout << setprecision(10);
 		clock_t end_new = clock();
-		double time = (double)(end_new - start_new) / CLOCKS_PER_SEC;/*(double)(end_new - start_new) * 1000.0 / CLOCKS_PER_SEC  for milliseconds*/
+		double time = (double)(end_new - start_new) / CLOCKS_PER_SEC;
 
 		//At this point, a solution clustering has been identified.
 		long double full_loglik_curr = 0; //loglikelihood for the full clustering
@@ -402,10 +398,6 @@ int lik_efficient(
 					);
 			}
 		}
-
-//Checking the observed and possible edge counts in the final solution
-//for (int i = 0; i <= k; i++) { cout << OBS[i] << "..."; } cout << endl;
-//for (int i = 0; i <= k; i++) { cout << POS[i] << "..."; } cout << endl;
 
 		//Get loglikelihood of between-cluster edges
 		unsigned long long int TOT_OBS = 0;
@@ -480,9 +472,6 @@ int lik_efficient(
 		}
 		mod_0 = e_mm - a_mm; //modularity of solution membership assignment
 
-//Checking the null hypothesis stats
-//cout << "LO=" << LO << ", LO_OBS=" << LO_OBS << ", LO_POS=" << LO_POS << endl;
-
 //STEP: Calculate Bayesian Information Criterion for solution clustering
 		//In old code, BIC = -2 * (LO + 0.5*(-bestfit)) + (k + 1)*log(N*(N - 1) / 2);
 		//but bestfit = -(-2 * (LO - full_loglik_curr)), so this can be simplified:		
@@ -490,7 +479,6 @@ int lik_efficient(
 		BIC = -2 * (full_loglik_curr)+(k + 1)*log(N*(N - 1) / (long double)2);
 		TESTSTAT = -2 * (LO - full_loglik_curr);
 
-//cout << "at k=" << k << ", modularity= " << mod_0 << ", loglik=" << full_loglik_curr << " and BIC=" << BIC << ", TESTSTAT=" << TESTSTAT << ", time=" << time << " sec.s" << endl;;
 		//Identify the optimum number of clusters, based on minimum Bayesian Information Criterion
 		if (k == min_k){
 			final_k = k;
