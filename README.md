@@ -3,7 +3,7 @@ Code for comparing naive and efficient undirected likelihood, modularity and Lou
 
 This code was created to support the paper "Improving computational performance in likelihood-based network clustering" by Alan Ballard and Marcus B. Perry. 
 
-This code will generate a set of the so-called LFR benchmark undirected networks proposed by Lancichinetti et all (2008) in "Benchmark graphs for testing community detection algorithms", along with corresponding ground-truth solutions.
+This code will generate a set of the so-called LFR benchmark undirected networks proposed by Lancichinetti et al (2008) in "Benchmark graphs for testing community detection algorithms", along with corresponding ground-truth solutions.
 Each LFR network is then clustered into a range of user-specified number of clusters using the likelihood objective function proposed by Perry et al (2013) in "On the statistical detection of clusters in undirected networks", the efficient version of this likelihood objective function proposed in the current paper and the modularity objective function proposed by Newman (2006) in "Modularity and community structure in networks". 
 This clustering is accomplished using simulated annealing and the LFR network generation parameters, the cluster number range, and the simulated annealing cooling schedule are adjustable within the code.
 
